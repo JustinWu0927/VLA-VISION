@@ -43,21 +43,31 @@ def align_and_diff(master_path, test_path):
         print("Not enough matches found to align images.")
         return
 
-    # 6. Compute Structural Similarity (SSIM) to find defects
-    score, diff_map = ssim(master, aligned_test, full=True)
+    # Find contours of the detected defect regions
+    contours, _ = cv2.findContours(defect_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
-    # Convert diff_map to standard 0-255 image format
-    diff_map = (diff_map * 255).astype("uint8")
+    annotated_test = cv2.cvtColor(aligned_test, cv2.COLOR_GRAY2BGR)
+    total_defect_area = 0
     
-    # Threshold the diff map to highlight major differences (defects)
-    _, defect_mask = cv2.threshold(diff_map, 150, 255, cv2.THRESH_BINARY_INV)
+    # Filter noise: only flag blobs larger than 20 pixels
+    for cnt in contours:
+        area = cv2.contourArea(cnt)
+        if area > 20:
+            total_defect_area += area
+            x, y, w, h = cv2.boundingRect(cnt)
+            cv2.rectangle(annotated_test, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-    # 7. Visualize the results
-    fig, axes = plt.subplots(1, 4, figsize=(16, 5))
-    axes[0].imshow(master, cmap='gray'); axes[0].set_title("Master")
-    axes[1].imshow(test, cmap='gray'); axes[1].set_title("Raw Test (Shifted)")
-    axes[2].imshow(aligned_test, cmap='gray'); axes[2].set_title("Aligned Test")
-    axes[3].imshow(defect_mask, cmap='hot'); axes[3].set_title(f"Defect Heatmap\nSSIM: {score:.3f}")
+    # Engineering Pass/Fail threshold (e.g., max allowable defect area = 50 sq px)
+    MAX_ALLOWED_DEFECT_AREA = 50
+    verdict = "PASS" if total_defect_area <= MAX_ALLOWED_DEFECT_AREA else "FAIL"
+    status_color = (0, 255, 0) if verdict == "PASS" else (0, 0, 255)
+
+    cv2.putText(annotated_test, f"STATUS: {verdict}", (20, 40), 
+                cv2.FONT_HERSHEY_SIMPLEX, 1.2, status_color, 3)
+    
+    print(f"\n--- Inspection Result ---")
+    print(f"Total Defect Area: {total_defect_area} px")
+    print(f"Final Decision: {verdict}")
     
     for ax in axes:
         ax.axis('off')
