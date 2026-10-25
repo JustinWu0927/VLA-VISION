@@ -1,19 +1,31 @@
-# My Learning Journey
-# My Robotics & Vision Learning Journey
+# VLA-VISION PROJECT
 
-This repository contains a series of incremental projects and experiments that serve as stepping stones toward my ultimate project.
+**Current Status:** 🚧 Active Development
 
-## The Ultimate Goal
-The final project will bring together mechanical CAD design, hardware control via ESP32, and automated optical inspection (AOI) / vision algorithms to allow the robot to interact intelligently with its environment.
+## Overview
+An ongoing project focused on integrating Vision-Language-Action (VLA) models for real-time robotic hardware control. This repository contains the computer vision pipeline, action-mapping algorithms, and system architecture for autonomous decision-making. 
 
-## Project Directory
+## Tech Stack
+*   **Language:** Python
+*   **Environment:** VS Code (`.venv`)
+*   **Computer Vision & Data Processing:** NumPy, SciPy, Matplotlib, PIL/Pillow
+*   **Hardware:** TBD
 
-| Phase | Folder | Focus Area | Status | Key Technologies |
-| :--- | :--- | :--- | :--- | :--- |
-| **01** | `/numpy_learning` | Image preprocessing and histogram equalization | In Progress | Python, NumPy, PIL, Matplotlib |
-| **02** | `/esp32-tank-control` | Microcontroller logic and motor driving | ⏳ Planned | MicroPython, ESP32 |
-| **03** | `/cad-mechanisms` | Tracked links, sprockets, and turret mechanisms | ⏳ Planned | Onshape, FeatureScript |
-| **04** | `/ultimate-tank` | System integration of vision and hardware | ⏳ Planned | Full Stack Integration |
+## System Architecture
+*   **Vision Module:** Processes incoming camera feeds using PIL and NumPy to extract spatial and object data.
+*   **Language & Logic Processing:**TBD.
+*   **Hardware Execution:** TBD.
 
-## How to Navigate
-Each sub-folder contains its own localized code and notes detailing the specific hardware setup, matrix math, or software instructions required to run that module.
+## Local Setup
+1. Clone the repository:
+   `git clone https://github.com/JustinWu0927/[Your-Repo-Name].git`
+2. Activate the virtual environment:
+   `source .venv/bin/activate` *(Linux/macOS)* or `.venv\Scripts\activate` *(Windows)*
+3. Install dependencies:
+   `pip install -r requirements.txt`
+
+## Development Roadmap
+- [x] Establish Python virtual environment and core CV dependencies.
+- [x] Configure image processing pipeline (PIL/NumPy).
+- [ ] Map vision outputs to physical hardware action spaces.
+- [ ] Optimize latency for real-time hardware response.
